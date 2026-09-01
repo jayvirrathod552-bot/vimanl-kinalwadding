@@ -29,6 +29,15 @@ app.use(express.json({ limit: '100mb' }));
 app.use(express.urlencoded({ extended: true, limit: '100mb' }));
 app.use(express.static(path.join(__dirname, 'public')));
 
+// Explicit HTML Page Routes for Vercel and Web
+app.get('/', (req, res) => {
+  res.sendFile(path.join(__dirname, 'public', 'index.html'));
+});
+
+app.get(['/wedding', '/wedding.html'], (req, res) => {
+  res.sendFile(path.join(__dirname, 'public', 'wedding.html'));
+});
+
 // Video Streaming & Media Route with Full HTTP 206 Range Support for Chrome & Browsers
 app.get('/uploads/:filename', (req, res) => {
   const filePath = path.join(UPLOADS_DIR, req.params.filename);
