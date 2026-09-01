@@ -7,20 +7,26 @@ const archiver = require('archiver');
 require('dotenv').config();
 
 const app = express();
-const PORT = process.env.PORT || 3000;
+const isVercel = Boolean(process.env.VERCEL || process.env.NOW_REGION);
 
-// Directories
-const DATA_DIR = path.join(__dirname, 'data');
-const DB_FILE = path.join(DATA_DIR, 'database.json');
-const UPLOADS_DIR = path.join(__dirname, 'uploads');
+// Directories (Support Vercel Serverless /tmp writable directory)
+const DATA_DIR = isVercel ? path.join('/tmp', 'data') : path.join(__dirname, 'data');
+const DB_FILE = isVercel ? path.join('/tmp', 'data', 'database.json') : path.join(DATA_DIR, 'database.json');
+const ORIGINAL_DB_FILE = path.join(__dirname, 'data', 'database.json');
+const UPLOADS_DIR = isVercel ? path.join('/tmp', 'uploads') : path.join(__dirname, 'uploads');
 
-if (!fs.existsSync(DATA_DIR)) fs.mkdirSync(DATA_DIR, { recursive: true });
-if (!fs.existsSync(UPLOADS_DIR)) fs.mkdirSync(UPLOADS_DIR, { recursive: true });
+try {
+  if (!fs.existsSync(DATA_DIR)) fs.mkdirSync(DATA_DIR, { recursive: true });
+} catch (e) {}
+
+try {
+  if (!fs.existsSync(UPLOADS_DIR)) fs.mkdirSync(UPLOADS_DIR, { recursive: true });
+} catch (e) {}
 
 // Middleware
 app.use(cors());
-app.use(express.json());
-app.use(express.urlencoded({ extended: true }));
+app.use(express.json({ limit: '100mb' }));
+app.use(express.urlencoded({ extended: true, limit: '100mb' }));
 app.use(express.static(path.join(__dirname, 'public')));
 
 // Video Streaming & Media Route with Full HTTP 206 Range Support for Chrome & Browsers
@@ -88,8 +94,13 @@ app.get('/uploads/:filename', (req, res) => {
 });
 app.use('/uploads', express.static(UPLOADS_DIR));
 
+// In-memory cache for serverless environments
+let memoryDBCache = null;
+
 // Helper: Read Database with Robust Fallbacks
 function readDB() {
+  if (memoryDBCache) return memoryDBCache;
+
   const defaultData = {
     settings: {
       appName: "V & K Media Vault",
@@ -144,29 +155,49 @@ function readDB() {
   };
 
   try {
-    if (!fs.existsSync(DB_FILE)) {
-      fs.writeFileSync(DB_FILE, JSON.stringify(defaultData, null, 2));
+    let sourcePath = null;
+    if (fs.existsSync(DB_FILE)) {
+      sourcePath = DB_FILE;
+    } else if (fs.existsSync(ORIGINAL_DB_FILE)) {
+      sourcePath = ORIGINAL_DB_FILE;
+    }
+
+    if (!sourcePath) {
+      try {
+        fs.writeFileSync(DB_FILE, JSON.stringify(defaultData, null, 2));
+      } catch (e) {}
+      memoryDBCache = defaultData;
       return defaultData;
     }
-    const data = fs.readFileSync(DB_FILE, 'utf8');
+
+    const data = fs.readFileSync(sourcePath, 'utf8');
     const parsed = JSON.parse(data);
     if (!parsed.settings) parsed.settings = defaultData.settings;
     if (!parsed.albums || !Array.isArray(parsed.albums)) parsed.albums = defaultData.albums;
     if (!parsed.media || !Array.isArray(parsed.media)) parsed.media = [];
     if (!parsed.wishes || !Array.isArray(parsed.wishes)) parsed.wishes = defaultData.wishes;
+    
+    memoryDBCache = parsed;
     return parsed;
   } catch (err) {
     console.error('Error reading database:', err);
+    memoryDBCache = defaultData;
     return defaultData;
   }
 }
 
 // Helper: Save Database
 function saveDB(data) {
+  memoryDBCache = data;
   try {
     fs.writeFileSync(DB_FILE, JSON.stringify(data, null, 2));
   } catch (err) {
-    console.error('Error writing database:', err);
+    // If running in read-only environment like Vercel, memoryDBCache retains changes
+    try {
+      if (isVercel && DB_FILE.startsWith('/tmp')) {
+        fs.writeFileSync(DB_FILE, JSON.stringify(data, null, 2));
+      }
+    } catch (e) {}
   }
 }
 
