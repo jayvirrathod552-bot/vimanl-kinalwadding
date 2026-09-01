@@ -4,10 +4,20 @@ const path = require('path');
 const fs = require('fs');
 const cors = require('cors');
 const archiver = require('archiver');
+let compression;
+try { compression = require('compression'); } catch (e) {}
 require('dotenv').config();
 
 const app = express();
 const isVercel = Boolean(process.env.VERCEL || process.env.NOW_REGION);
+
+// GZIP / Brotli Compression for Lightning-Fast Loading
+if (compression) {
+  app.use(compression({
+    level: 6,
+    threshold: 1024
+  }));
+}
 
 // Directories (Support Vercel Serverless /tmp writable directory)
 const DATA_DIR = isVercel ? path.join('/tmp', 'data') : path.join(__dirname, 'data');
@@ -23,11 +33,15 @@ try {
   if (!fs.existsSync(UPLOADS_DIR)) fs.mkdirSync(UPLOADS_DIR, { recursive: true });
 } catch (e) {}
 
-// Middleware
+// Middleware with CDN Caching for Static Assets
 app.use(cors());
 app.use(express.json({ limit: '100mb' }));
 app.use(express.urlencoded({ extended: true, limit: '100mb' }));
-app.use(express.static(path.join(__dirname, 'public')));
+app.use(express.static(path.join(__dirname, 'public'), {
+  maxAge: isVercel ? '1d' : '1h',
+  etag: true,
+  lastModified: true
+}));
 
 // Explicit HTML Page Routes for Vercel and Web
 app.get('/', (req, res) => {

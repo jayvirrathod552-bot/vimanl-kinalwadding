@@ -158,7 +158,7 @@ const Gallery = {
           <div class="video-play-indicator">
             <i class="fa-solid fa-play"></i>
           </div>
-          <video class="media-thumbnail video-thumb" preload="metadata" muted playsinline loop src="${previewSrc}#t=0.1">
+          <video class="media-thumbnail video-thumb" preload="none" muted playsinline loop src="${previewSrc}#t=0.1">
           </video>
         ` : `
           <img src="${previewSrc}" alt="Photo" class="media-thumbnail" loading="lazy" onerror="this.onerror=null; this.src='data:image/svg+xml;utf8,<svg xmlns=\\'http://www.w3.org/2000/svg\\' width=\\'400\\' height=\\'300\\' viewBox=\\'0 0 400 300\\'><rect fill=\\'%2311141e\\' width=\\'400\\' height=\\'300\\'/><text fill=\\'%23d4af37\\' font-size=\\'18\\' font-family=\\'sans-serif\\' x=\\'50%\\' y=\\'50%\\' text-anchor=\\'middle\\'>Photo</text></svg>';">
