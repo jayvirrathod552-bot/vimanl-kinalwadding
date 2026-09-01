@@ -1,0 +1,606 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <title>V & K | Vimal & Kenal Wedding Album & Media Vault</title>
+  
+  <!-- SEO Meta Tags -->
+  <meta name="description" content="Private and secure media storage and wedding album gallery for Vimal & Kenal with dual password access.">
+  <meta name="keywords" content="vimal kenal wedding, wedding media vault, private photo storage, shared gallery">
+  <meta name="author" content="Vimal & Kenal">
+  <meta name="theme-color" content="#0d0f17">
+  
+  <!-- Open Graph / WhatsApp Preview -->
+  <meta property="og:type" content="website">
+  <meta property="og:title" content="V & K Media Vault | Vimal & Kenal">
+  <meta property="og:description" content="Access private photo and video collections of Vimal & Kenal wedding securely with your group PIN.">
+  <meta property="og:image" content="/images/og-preview.png">
+  
+  <!-- Google Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&family=Plus+Jakarta+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  
+  <!-- Font Awesome Icons -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+  
+  <!-- App Stylesheet -->
+  <link rel="stylesheet" href="./css/style.css">
+</head>
+<body class="dark-theme">
+
+  <!-- Background Ambient Glows -->
+  <div class="ambient-glow glow-1"></div>
+  <div class="ambient-glow glow-2"></div>
+
+  <!-- Toast Notifications Container -->
+  <div id="toast-container" class="toast-container"></div>
+
+  <!-- ================= HEADER NAVIGATION ================= -->
+  <header class="app-header" id="app-header">
+    <div class="header-container">
+      <div class="brand-logo" id="brand-home-btn" role="button" tabindex="0">
+        <div class="logo-icon"><i class="fa-solid fa-shield-halved"></i></div>
+        <div class="logo-text">
+          <span class="logo-title">V &amp; K</span>
+          <span class="logo-sub">MEDIA VAULT</span>
+        </div>
+      </div>
+
+      <!-- Navigation Actions (Dynamic based on Auth) -->
+      <div class="header-actions" id="header-actions">
+        <!-- Injected via JS -->
+      </div>
+    </div>
+  </header>
+
+  <!-- ================= MAIN APPLICATION VIEWPORT ================= -->
+  <main class="main-viewport" id="main-viewport">
+    
+    <!-- VIEW 1: AUTHENTICATION / LANDING (DUAL ACCESS) -->
+    <section id="view-auth" class="view-section active">
+      <div class="auth-wrapper">
+        <div class="auth-hero">
+          <div class="vault-badge"><i class="fa-solid fa-lock"></i> Encrypted Personal Vault</div>
+          <h1 class="hero-title">Vimal &amp; Kenal Media Vault</h1>
+          <p class="hero-subtitle">High-resolution photo &amp; video vault with dedicated Admin and Group access.</p>
+          
+          <!-- Wedding Quick Banner -->
+          <div class="wedding-quick-banner">
+            <div class="banner-inner">
+              <i class="fa-solid fa-ring banner-icon"></i>
+              <span class="banner-text">Attending the Wedding? Check schedule &amp; post wishes:</span>
+            </div>
+            <a href="/wedding.html" class="banner-btn">Open Wedding &rarr;</a>
+          </div>
+        </div>
+
+        <div class="auth-cards-container">
+          <!-- CARD 1: GROUP / GUEST PIN ACCESS -->
+          <div class="auth-card guest-card glass-panel">
+            <div class="card-glow"></div>
+            <div class="card-header">
+              <div class="card-icon"><i class="fa-solid fa-users-viewfinder"></i></div>
+              <h2>Group / Guest Access</h2>
+              <p>Enter your album PIN to view and download photos &amp; videos</p>
+            </div>
+
+            <form id="group-login-form" class="auth-form">
+              <div class="form-group pin-input-wrapper">
+                <label for="group-pin-input"><i class="fa-solid fa-key"></i> Enter Album PIN</label>
+                <div class="pin-box-group">
+                  <input type="password" id="group-pin-input" class="form-control pin-input" maxlength="8" placeholder="Enter PIN" autocomplete="off" required>
+                  <button type="button" class="btn-toggle-visibility" id="toggle-group-pin" title="Show/Hide PIN">
+                    <i class="fa-regular fa-eye"></i>
+                  </button>
+                </div>
+              </div>
+
+              <button type="submit" class="btn btn-primary btn-block btn-shine" id="group-login-btn">
+                <span>Unlock Gallery</span>
+                <i class="fa-solid fa-arrow-right"></i>
+              </button>
+            </form>
+          </div>
+
+          <!-- CARD 2: MASTER ADMIN ACCESS -->
+          <div class="auth-card admin-card glass-panel">
+            <div class="card-glow gold"></div>
+            <div class="card-header">
+              <div class="card-icon gold"><i class="fa-solid fa-crown"></i></div>
+              <h2>Admin Master Login</h2>
+              <p>Manage albums, upload files &amp; configure PIN codes</p>
+            </div>
+
+            <form id="admin-login-form" class="auth-form">
+              <div class="form-group">
+                <label for="admin-pass-input"><i class="fa-solid fa-user-shield"></i> Master Password</label>
+                <div class="pin-box-group">
+                  <input type="password" id="admin-pass-input" class="form-control" placeholder="Enter admin password" required>
+                  <button type="button" class="btn-toggle-visibility" id="toggle-admin-pass" title="Show/Hide Password">
+                    <i class="fa-regular fa-eye"></i>
+                  </button>
+                </div>
+              </div>
+
+              <button type="submit" class="btn btn-gold btn-block btn-shine" id="admin-login-btn">
+                <span>Admin Dashboard</span>
+                <i class="fa-solid fa-lock-open"></i>
+              </button>
+            </form>
+          </div>
+        </div>
+
+        <!-- Trust Badges -->
+        <div class="trust-features">
+          <div class="trust-item"><i class="fa-solid fa-cloud-arrow-down"></i> One-Click ZIP Download</div>
+          <div class="trust-item"><i class="fa-solid fa-bolt"></i> 0 API / Unlimited Local Space</div>
+          <div class="trust-item"><i class="fa-solid fa-mobile-screen"></i> 100% Mobile Responsive</div>
+          <div class="trust-item"><i class="fa-solid fa-film"></i> HD Video Streaming</div>
+        </div>
+      </div>
+    </section>
+
+    <!-- VIEW 2: GROUP GALLERY & VIEWER -->
+    <section id="view-gallery" class="view-section">
+      <div class="gallery-container">
+        
+        <!-- Album Banner / Header -->
+        <div class="album-hero glass-panel">
+          <div class="album-hero-content">
+            <div class="album-badge" id="gallery-album-badge"><i class="fa-solid fa-folder-open"></i> Album</div>
+            <h1 class="album-title" id="gallery-album-title">Family &amp; Moments</h1>
+            <p class="album-desc" id="gallery-album-desc">Cherished family photos and special memories</p>
+            <div class="album-meta-stats">
+              <span id="gallery-count-photos"><i class="fa-regular fa-image"></i> 0 Photos</span>
+              <span id="gallery-count-videos"><i class="fa-solid fa-video"></i> 0 Videos</span>
+            </div>
+          </div>
+          
+          <div class="album-hero-actions">
+            <button class="btn btn-primary btn-glow" id="gallery-download-zip-btn" title="Download all photos and videos as a single ZIP file">
+              <i class="fa-solid fa-file-zipper"></i>
+              <span>Download All (ZIP)</span>
+            </button>
+            <button class="btn btn-secondary" id="gallery-switch-album-btn">
+              <i class="fa-solid fa-repeat"></i>
+              <span>Switch Album</span>
+            </button>
+          </div>
+        </div>
+
+        <!-- Filter & Search Controls -->
+        <div class="gallery-toolbar glass-panel">
+          <div class="toolbar-search">
+            <i class="fa-solid fa-magnifying-glass"></i>
+            <input type="text" id="gallery-search-input" placeholder="Search by name...">
+          </div>
+
+          <div class="toolbar-tabs" id="gallery-type-tabs">
+            <button class="tab-btn active" data-type="all"><i class="fa-solid fa-layer-group"></i> All</button>
+            <button class="tab-btn" data-type="photo"><i class="fa-regular fa-image"></i> Photos</button>
+            <button class="tab-btn" data-type="video"><i class="fa-solid fa-video"></i> Videos</button>
+            <button class="tab-btn" data-type="favorite"><i class="fa-solid fa-heart"></i> Favorites</button>
+          </div>
+        </div>
+
+        <!-- Media Grid Container -->
+        <div class="media-grid" id="media-grid">
+          <!-- Populated by JS -->
+        </div>
+
+        <!-- Empty State -->
+        <div class="empty-state glass-panel" id="gallery-empty-state" style="display: none;">
+          <div class="empty-icon"><i class="fa-regular fa-images"></i></div>
+          <h3>No Media Found</h3>
+          <p>No photos or videos match your current filter. Check back soon or switch albums.</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- VIEW 3: ADMIN DASHBOARD -->
+    <section id="view-admin" class="view-section">
+      <div class="admin-container">
+        
+        <!-- Top Stats Bar -->
+        <div class="admin-stats-grid">
+          <div class="stat-card glass-panel">
+            <div class="stat-icon purple"><i class="fa-solid fa-photo-film"></i></div>
+            <div class="stat-info">
+              <span class="stat-value" id="stat-total-media">0</span>
+              <span class="stat-label">Total Photos &amp; Videos</span>
+            </div>
+          </div>
+
+          <div class="stat-card glass-panel">
+            <div class="stat-icon gold"><i class="fa-solid fa-folder-tree"></i></div>
+            <div class="stat-info">
+              <span class="stat-value" id="stat-total-albums">0</span>
+              <span class="stat-label">Active Albums / PINs</span>
+            </div>
+          </div>
+
+          <div class="stat-card glass-panel storage-stat-card">
+            <div class="stat-icon blue"><i class="fa-solid fa-hard-drive"></i></div>
+            <div class="stat-info">
+              <div class="storage-text-row">
+                <span class="stat-value" id="stat-storage-used">0 MB</span>
+                <span class="stat-sub" id="stat-storage-limit">/ 25 GB</span>
+              </div>
+              <div class="storage-bar-bg">
+                <div class="storage-bar-fill" id="stat-storage-progress" style="width: 2%;"></div>
+              </div>
+              <span class="stat-label" id="stat-storage-percent">0% Local Disk Used</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Admin Navigation Tabs -->
+        <div class="admin-tabs">
+          <button class="admin-tab-btn active" data-tab="tab-upload">
+            <i class="fa-solid fa-cloud-arrow-up"></i>
+            <span>Upload &amp; Import</span>
+          </button>
+          <button class="admin-tab-btn" data-tab="tab-manage-media">
+            <i class="fa-solid fa-images"></i>
+            <span>Manage Media</span>
+          </button>
+          <button class="admin-tab-btn" data-tab="tab-albums">
+            <i class="fa-solid fa-key"></i>
+            <span>Albums &amp; Group PINs</span>
+          </button>
+          <button class="admin-tab-btn" data-tab="tab-settings">
+            <i class="fa-solid fa-sliders"></i>
+            <span>Settings</span>
+          </button>
+        </div>
+
+        <!-- TAB 1: UPLOAD & IMPORT -->
+        <div class="admin-tab-content active" id="tab-upload">
+          <div class="upload-split-grid">
+            
+            <!-- Direct Multi-File Upload Box -->
+            <div class="upload-box glass-panel">
+              <div class="section-title-row">
+                <h3><i class="fa-solid fa-upload"></i> Bulk Upload (Local Storage)</h3>
+                <span class="badge badge-success">Unlimited / 0 API</span>
+              </div>
+              <p class="section-subtext">Upload multiple HD Photos and 4K Videos directly to your system disk.</p>
+
+              <!-- Target Album Selector -->
+              <div class="form-group">
+                <label for="upload-target-album"><i class="fa-regular fa-folder"></i> Choose Target Album</label>
+                <select id="upload-target-album" class="form-control custom-select">
+                  <!-- Populated by JS -->
+                </select>
+              </div>
+
+              <!-- Dropzone -->
+              <div class="dropzone-container" id="file-dropzone">
+                <input type="file" id="file-input-bulk" multiple accept="image/*,video/*" class="file-hidden-input">
+                <div class="dropzone-content">
+                  <div class="dropzone-icon"><i class="fa-solid fa-cloud-arrow-up"></i></div>
+                  <h4>Drag &amp; Drop Photos or Videos here</h4>
+                  <p>or click anywhere to browse files</p>
+                  <div class="file-types-hint">Supports: JPG, PNG, WEBP, MP4, MOV, MKV, etc.</div>
+                </div>
+              </div>
+
+              <!-- Upload Progress Container -->
+              <div id="upload-progress-container" class="upload-progress-container" style="display: none;">
+                <div class="progress-info-row">
+                  <span id="upload-status-text">Uploading 0 of 0 files...</span>
+                  <span id="upload-percent-text">0%</span>
+                </div>
+                <div class="progress-bar-track">
+                  <div class="progress-bar-fill" id="upload-progress-fill" style="width: 0%;"></div>
+                </div>
+              </div>
+
+              <div class="upload-queue-list" id="upload-queue-list"></div>
+            </div>
+
+            <!-- Google Drive Share Link Importer -->
+            <div class="import-box glass-panel">
+              <div class="section-title-row">
+                <h3><i class="fa-brands fa-google-drive"></i> Google Drive Link Importer</h3>
+                <span class="badge badge-gold">15 GB Free / 0 API</span>
+              </div>
+              <p class="section-subtext">Paste any public Google Drive photo or video share link. Works instantly with 0 API keys required!</p>
+
+              <form id="gdrive-import-form" class="gdrive-form">
+                <div class="form-group">
+                  <label for="gdrive-album-select"><i class="fa-regular fa-folder"></i> Target Album</label>
+                  <select id="gdrive-album-select" class="form-control custom-select">
+                    <!-- Populated by JS -->
+                  </select>
+                </div>
+
+                <div class="form-group">
+                  <label for="gdrive-url-input"><i class="fa-solid fa-link"></i> Google Drive Share Link</label>
+                  <input type="url" id="gdrive-url-input" class="form-control" placeholder="https://drive.google.com/file/d/..." required>
+                </div>
+
+                <div class="form-group">
+                  <label for="gdrive-title-input"><i class="fa-regular fa-bookmark"></i> Title / Caption (Optional)</label>
+                  <input type="text" id="gdrive-title-input" class="form-control" placeholder="e.g. Wedding Reception Highlights">
+                </div>
+
+                <div class="form-group">
+                  <label><i class="fa-solid fa-shapes"></i> Media Type</label>
+                  <div class="radio-pill-group">
+                    <label class="radio-pill">
+                      <input type="radio" name="gdrive-type" value="photo" checked>
+                      <span><i class="fa-regular fa-image"></i> Photo</span>
+                    </label>
+                    <label class="radio-pill">
+                      <input type="radio" name="gdrive-type" value="video">
+                      <span><i class="fa-solid fa-video"></i> Video</span>
+                    </label>
+                  </div>
+                </div>
+
+                <button type="submit" class="btn btn-gold btn-block btn-shine" id="gdrive-submit-btn">
+                  <i class="fa-solid fa-plus"></i>
+                  <span>Import from Google Drive</span>
+                </button>
+              </form>
+            </div>
+          </div>
+        </div>
+
+        <!-- TAB 2: MANAGE MEDIA -->
+        <div class="admin-tab-content" id="tab-manage-media">
+          <div class="manage-media-header glass-panel">
+            <div class="manage-filters">
+              <select id="admin-media-album-filter" class="form-control">
+                <option value="all">All Albums</option>
+              </select>
+              <select id="admin-media-type-filter" class="form-control">
+                <option value="all">All Media</option>
+                <option value="photo">Photos Only</option>
+                <option value="video">Videos Only</option>
+              </select>
+            </div>
+            <div class="manage-actions">
+              <button class="btn btn-danger-outline" id="btn-batch-delete" style="display: none;">
+                <i class="fa-solid fa-trash"></i> Delete Selected
+              </button>
+            </div>
+          </div>
+
+          <div class="admin-media-table-wrapper glass-panel">
+            <table class="custom-table" id="admin-media-table">
+              <thead>
+                <tr>
+                  <th width="40"><input type="checkbox" id="select-all-media"></th>
+                  <th width="80">Preview</th>
+                  <th>Title &amp; File</th>
+                  <th>Album</th>
+                  <th>Type</th>
+                  <th>Source</th>
+                  <th>Actions</th>
+                </tr>
+              </thead>
+              <tbody id="admin-media-tbody">
+                <!-- Populated by JS -->
+              </tbody>
+            </table>
+          </div>
+        </div>
+
+        <!-- TAB 3: ALBUMS & GROUP PINS -->
+        <div class="admin-tab-content" id="tab-albums">
+          <div class="albums-manager-header">
+            <h3>Manage Albums &amp; Access PINs</h3>
+            <button class="btn btn-gold btn-sm" id="btn-create-album-modal">
+              <i class="fa-solid fa-plus"></i> Create New Album
+            </button>
+          </div>
+
+          <div class="albums-card-grid" id="admin-albums-grid">
+            <!-- Populated by JS -->
+          </div>
+        </div>
+
+        <!-- TAB 4: SETTINGS -->
+        <div class="admin-tab-content" id="tab-settings">
+          <div class="settings-card glass-panel">
+            <h3><i class="fa-solid fa-user-shield"></i> Security &amp; Master Password</h3>
+            <p class="section-subtext">Change your Master Admin Password used to log in to this portal.</p>
+            
+            <form id="settings-password-form" class="settings-form">
+              <div class="form-group">
+                <label for="setting-new-pass">New Master Password</label>
+                <input type="password" id="setting-new-pass" class="form-control" placeholder="Enter new password" required>
+              </div>
+              <div class="form-group">
+                <label for="setting-confirm-pass">Confirm Password</label>
+                <input type="password" id="setting-confirm-pass" class="form-control" placeholder="Re-enter password" required>
+              </div>
+              <button type="submit" class="btn btn-gold">Update Master Password</button>
+            </form>
+          </div>
+        </div>
+
+      </div>
+    </section>
+
+  </main>
+
+  <!-- ================= LIGHTBOX MODAL (FOR PHOTOS) ================= -->
+  <div id="lightbox-modal" class="lightbox-modal">
+    <div class="lightbox-backdrop"></div>
+    <div class="lightbox-content">
+      <div class="lightbox-header">
+        <div class="lightbox-meta">
+          <h4 id="lightbox-title">Photo Title</h4>
+          <span id="lightbox-counter">1 of 10</span>
+        </div>
+        <div class="lightbox-controls">
+          <button class="lightbox-btn" id="lightbox-fav-btn" title="Add to Favorites"><i class="fa-regular fa-heart"></i></button>
+          <a class="lightbox-btn" id="lightbox-download-btn" title="Download High Quality" download><i class="fa-solid fa-download"></i></a>
+          <button class="lightbox-btn close-btn" id="lightbox-close-btn" title="Close"><i class="fa-solid fa-xmark"></i></button>
+        </div>
+      </div>
+
+      <div class="lightbox-body">
+        <button class="lightbox-nav-btn prev-btn" id="lightbox-prev-btn"><i class="fa-solid fa-chevron-left"></i></button>
+        <div class="lightbox-image-wrapper">
+          <img id="lightbox-img" src="" alt="Media Preview">
+        </div>
+        <button class="lightbox-nav-btn next-btn" id="lightbox-next-btn"><i class="fa-solid fa-chevron-right"></i></button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ================= VIDEO PLAYER MODAL ================= -->
+  <div id="video-modal" class="video-modal">
+    <div class="video-backdrop"></div>
+    <div class="video-modal-content glass-panel">
+      <div class="video-modal-header">
+        <h4 id="video-modal-title">Video Player</h4>
+        <button class="video-modal-close" id="video-modal-close"><i class="fa-solid fa-xmark"></i></button>
+      </div>
+      <div class="video-player-wrapper" id="video-player-container">
+        <!-- Native video or iframe injected by JS -->
+      </div>
+      <div class="video-modal-footer">
+        <a id="video-download-btn" class="btn btn-primary" download>
+          <i class="fa-solid fa-download"></i> Download Video
+        </a>
+      </div>
+    </div>
+  </div>
+
+  <!-- ================= ALBUM SWITCHER / SELECTION MODAL ================= -->
+  <div id="album-switcher-modal" class="custom-modal">
+    <div class="modal-backdrop"></div>
+    <div class="modal-box glass-panel">
+      <div class="modal-header">
+        <h3><i class="fa-solid fa-folder-tree"></i> Select Album</h3>
+        <button class="modal-close-btn" id="album-switcher-close"><i class="fa-solid fa-xmark"></i></button>
+      </div>
+      <div class="modal-body">
+        <div class="albums-picker-list" id="albums-picker-list">
+          <!-- Populated by JS -->
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ================= CREATE/EDIT ALBUM MODAL (ADMIN) ================= -->
+  <div id="create-album-modal" class="custom-modal">
+    <div class="modal-backdrop"></div>
+    <div class="modal-box glass-panel">
+      <div class="modal-header">
+        <h3 id="album-modal-title"><i class="fa-solid fa-folder-plus"></i> Create New Album</h3>
+        <button class="modal-close-btn" id="create-album-close"><i class="fa-solid fa-xmark"></i></button>
+      </div>
+      <form id="create-album-form" class="modal-body">
+        <input type="hidden" id="edit-album-id">
+        <div class="form-group">
+          <label for="modal-album-name">Album Name *</label>
+          <input type="text" id="modal-album-name" class="form-control" placeholder="e.g. Wedding Reception" required>
+        </div>
+        <div class="form-group">
+          <label for="modal-album-desc">Description (Optional)</label>
+          <input type="text" id="modal-album-desc" class="form-control" placeholder="e.g. Reception dinner & dance party">
+        </div>
+        <div class="form-group">
+          <label for="modal-album-pin">Group Access PIN (Numeric or Alpha) *</label>
+          <input type="text" id="modal-album-pin" class="form-control" placeholder="e.g. 7788" required>
+          <small class="form-hint">Share this PIN with friends/family so they can unlock this album.</small>
+        </div>
+        <div class="modal-actions">
+          <button type="button" class="btn btn-secondary" id="modal-album-cancel">Cancel</button>
+          <button type="submit" class="btn btn-gold" id="modal-album-save-btn">Save Album</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- ================= MASTER ADMIN AUTH MODAL ================= -->
+  <div id="admin-auth-modal" class="custom-modal">
+    <div class="modal-backdrop"></div>
+    <div class="modal-box glass-panel" style="max-width: 420px;">
+      <div class="modal-header">
+        <div style="display: flex; align-items: center; gap: 10px;">
+          <div style="width: 38px; height: 38px; border-radius: 50%; background: rgba(212, 175, 55, 0.15); border: 1px solid var(--gold-primary); display: flex; align-items: center; justify-content: center; color: var(--gold-primary); font-size: 1.1rem;">
+            <i class="fa-solid fa-crown"></i>
+          </div>
+          <h3 style="margin: 0; font-size: 1.25rem;">Admin Access</h3>
+        </div>
+        <button class="modal-close-btn" id="admin-auth-close"><i class="fa-solid fa-xmark"></i></button>
+      </div>
+      <form id="admin-auth-modal-form">
+        <div class="form-group">
+          <label for="admin-auth-modal-pass"><i class="fa-solid fa-key" style="color: var(--gold-primary); margin-right: 4px;"></i> Master Password</label>
+          <div class="pin-box-group">
+            <input type="password" id="admin-auth-modal-pass" class="form-control" placeholder="Enter admin password" required autocomplete="current-password">
+            <button type="button" class="btn-toggle-visibility" id="toggle-admin-auth-modal-pass" title="Show/Hide">
+              <i class="fa-regular fa-eye"></i>
+            </button>
+          </div>
+        </div>
+        <div class="modal-actions" style="margin-top: 20px;">
+          <button type="button" class="btn btn-secondary" id="admin-auth-cancel">Cancel</button>
+          <button type="submit" class="btn btn-gold" id="admin-auth-submit-btn">
+            <span>Unlock Dashboard</span>
+            <i class="fa-solid fa-arrow-right"></i>
+          </button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- ================= LUXURY DELETE CONFIRMATION MODAL ================= -->
+  <div id="delete-confirm-modal" class="custom-modal">
+    <div class="modal-backdrop"></div>
+    <div class="modal-box glass-panel" style="max-width: 440px; text-align: center; padding: 28px;">
+      <div style="width: 58px; height: 58px; border-radius: 50%; background: rgba(239, 68, 68, 0.15); border: 1px solid rgba(239, 68, 68, 0.35); display: inline-flex; align-items: center; justify-content: center; color: #ef4444; font-size: 1.5rem; margin-bottom: 16px;">
+        <i class="fa-solid fa-trash-can"></i>
+      </div>
+      <h3 id="delete-confirm-title" style="margin-bottom: 8px; font-size: 1.3rem;">Delete Media?</h3>
+      <p id="delete-confirm-desc" style="color: var(--text-secondary); font-size: 0.95rem; margin-bottom: 24px; line-height: 1.5;">Are you sure you want to permanently delete this media file? This action cannot be undone.</p>
+      <div style="display: flex; gap: 12px; justify-content: center;">
+        <button type="button" class="btn btn-secondary" id="btn-cancel-delete" style="flex: 1; padding: 10px 18px;">Cancel</button>
+        <button type="button" class="btn btn-danger" id="btn-confirm-delete" style="flex: 1; padding: 10px 18px; background: linear-gradient(135deg, #ef4444, #b91c1c); color: #fff; font-weight: 700; border: none; border-radius: 10px; cursor: pointer;">
+          <i class="fa-solid fa-trash"></i> Delete
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ================= MOBILE BOTTOM NAVIGATION ================= -->
+  <nav class="mobile-bottom-nav" id="mobile-bottom-nav">
+    <button class="nav-item active" id="mob-nav-gallery">
+      <i class="fa-solid fa-images"></i>
+      <span>Gallery</span>
+    </button>
+    <button class="nav-item" id="mob-nav-albums">
+      <i class="fa-solid fa-folder-tree"></i>
+      <span>Albums</span>
+    </button>
+    <button class="nav-item" id="mob-nav-favorites">
+      <i class="fa-solid fa-heart"></i>
+      <span>Favorites</span>
+    </button>
+    <button class="nav-item" id="mob-nav-admin" style="display: none;">
+      <i class="fa-solid fa-crown"></i>
+      <span>Admin</span>
+    </button>
+    <button class="nav-item" id="mob-nav-logout">
+      <i class="fa-solid fa-arrow-right-from-bracket"></i>
+      <span>Exit</span>
+    </button>
+  </nav>
+
+  <!-- JavaScript Modules -->
+  <script src="./js/api.js"></script>
+  <script src="./js/gallery.js"></script>
+  <script src="./js/admin.js"></script>
+  <script src="./js/app.js"></script>
+</body>
+</html>

@@ -1,0 +1,102 @@
+{
+  "settings": {
+    "appName": "V & K Media Vault",
+    "adminPassword": "8068",
+    "storageLimitMB": 102400,
+    "theme": "luxury-dark",
+    "allowGuestDownloads": true
+  },
+  "albums": [
+    {
+      "id": "family-album",
+      "name": "Family & Special Moments",
+      "description": "Cherished family moments, candid smiles, and gatherings",
+      "pin": "1511",
+      "createdAt": "2026-08-31T09:00:00.000Z"
+    },
+    {
+      "id": "celebrations-album",
+      "name": "Celebrations & Parties",
+      "description": "Celebrations, festive lights, and party highlights",
+      "pin": "9999",
+      "createdAt": "2026-08-31T09:10:00.000Z"
+    },
+    {
+      "id": "album-1788239223142",
+      "name": "haldi",
+      "description": "08/02/2026",
+      "pin": "85296",
+      "coverImage": "",
+      "createdAt": "2026-09-01T05:07:03.142Z"
+    }
+  ],
+  "media": [
+    {
+      "id": "media-1788251165130-1337",
+      "albumId": "family-album",
+      "filename": "Toxic_V2__2026__South_Hindi_Dubbed_Movie_FHQCam_1080p_HQ-1788251115334-598954.mkv",
+      "originalName": "Toxic V2 (2026) South Hindi Dubbed Movie FHQCam 1080p HQ.mkv",
+      "title": "Toxic V2 (2026) South Hindi Dubbed Movie FHQCam 1080p HQ",
+      "size": 7907414982,
+      "mimeType": "video/matroska",
+      "type": "video",
+      "storageType": "local",
+      "localPath": "Toxic_V2__2026__South_Hindi_Dubbed_Movie_FHQCam_1080p_HQ-1788251115334-598954.mkv",
+      "url": "/uploads/Toxic_V2__2026__South_Hindi_Dubbed_Movie_FHQCam_1080p_HQ-1788251115334-598954.mkv",
+      "downloadUrl": "/uploads/Toxic_V2__2026__South_Hindi_Dubbed_Movie_FHQCam_1080p_HQ-1788251115334-598954.mkv",
+      "isFavorite": false,
+      "uploadedAt": "2026-09-01T08:26:05.130Z"
+    }
+  ],
+  "wishes": [
+    {
+      "id": "wish-1788247921073",
+      "name": "Tester",
+      "side": "Friends",
+      "message": "Have a great wedding!",
+      "createdAt": "2026-09-01T07:32:01.073Z"
+    },
+    {
+      "id": "wish-1788236551991",
+      "name": "Samantha & Dave",
+      "side": "Groom's Side 🤵",
+      "message": "Wishing you both endless happiness and love!",
+      "createdAt": "2026-09-01T04:22:31.991Z"
+    },
+    {
+      "id": "wish-1788234552222",
+      "name": "jay",
+      "side": "Groom's Side 🤵",
+      "message": "congratulation",
+      "createdAt": "2026-09-01T03:49:12.222Z"
+    },
+    {
+      "id": "wish-1788173306992",
+      "name": "Jayvir & Friends",
+      "side": "Family & Relatives 💖",
+      "message": "Congratulations Vimal & Kenal on your auspicious wedding! May you have a blessed life ahead!",
+      "createdAt": "2026-08-31T10:48:26.992Z"
+    },
+    {
+      "id": "wish-1788173053041",
+      "name": "Aarav Patel",
+      "side": "Groom's Side 🤵",
+      "message": "Best wishes to Vimal & Kenal!",
+      "createdAt": "2026-08-31T10:44:13.041Z"
+    },
+    {
+      "id": "wish-demo-1",
+      "name": "Rahul & Family",
+      "side": "Groom's Side 🤵",
+      "message": "Wishing Vimal & Kenal a lifetime of love, joy, and wonderful adventures together! ❤️✨",
+      "createdAt": "2026-08-30T10:44:13.036Z"
+    },
+    {
+      "id": "wish-demo-2",
+      "name": "Pooja Mehta",
+      "side": "Bride's Side 👰",
+      "message": "Heartiest congratulations to the most beautiful couple! May your bond grow stronger every single day. 💐🥂",
+      "createdAt": "2026-08-30T22:44:13.036Z"
+    }
+  ]
+}
