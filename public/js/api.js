@@ -299,12 +299,16 @@ const API = {
           const resData = JSON.parse(xhr.responseText);
           if (xhr.status >= 200 && xhr.status < 300 && resData.success !== false) {
             resolve(resData);
+          } else if (xhr.status === 413) {
+            reject(new Error('File exceeds Vercel 4.5MB serverless limit. For large videos, use "Import from Google Drive" tab or local Wi-Fi!'));
           } else {
             reject(new Error(resData.message || `Upload failed with status ${xhr.status}`));
           }
         } catch (err) {
           if (xhr.status >= 200 && xhr.status < 300) {
             resolve({ success: true, count: files.length });
+          } else if (xhr.status === 413) {
+            reject(new Error('File exceeds Vercel 4.5MB serverless limit. For large videos, use "Import from Google Drive" tab or local Wi-Fi!'));
           } else {
             reject(new Error(`Upload failed with status ${xhr.status}`));
           }
