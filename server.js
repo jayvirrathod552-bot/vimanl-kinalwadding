@@ -20,11 +20,17 @@ if (compression) {
   }));
 }
 
-// Directories (Support Vercel Serverless /tmp writable directory)
-const DATA_DIR = isVercel ? path.join('/tmp', 'data') : path.join(__dirname, 'data');
+// Directories (Support Vercel Serverless /tmp writable directory & static assets)
+const PUBLIC_DIR = fs.existsSync(path.join(__dirname, 'public')) 
+  ? path.join(__dirname, 'public') 
+  : path.join(process.cwd(), 'public');
+
+const DATA_DIR = isVercel ? path.join('/tmp', 'data') : (fs.existsSync(path.join(__dirname, 'data')) ? path.join(__dirname, 'data') : path.join(process.cwd(), 'data'));
 const DB_FILE = isVercel ? path.join('/tmp', 'data', 'database.json') : path.join(DATA_DIR, 'database.json');
-const ORIGINAL_DB_FILE = path.join(__dirname, 'data', 'database.json');
-const UPLOADS_DIR = isVercel ? path.join('/tmp', 'uploads') : path.join(__dirname, 'uploads');
+const ORIGINAL_DB_FILE = fs.existsSync(path.join(__dirname, 'data', 'database.json'))
+  ? path.join(__dirname, 'data', 'database.json')
+  : path.join(process.cwd(), 'data', 'database.json');
+const UPLOADS_DIR = isVercel ? path.join('/tmp', 'uploads') : (fs.existsSync(path.join(__dirname, 'uploads')) ? path.join(__dirname, 'uploads') : path.join(process.cwd(), 'uploads'));
 
 try {
   if (!fs.existsSync(DATA_DIR)) fs.mkdirSync(DATA_DIR, { recursive: true });
@@ -38,7 +44,7 @@ try {
 app.use(cors());
 app.use(express.json({ limit: '100mb' }));
 app.use(express.urlencoded({ extended: true, limit: '100mb' }));
-app.use(express.static(path.join(__dirname, 'public'), {
+app.use(express.static(PUBLIC_DIR, {
   maxAge: isVercel ? '1d' : '1h',
   etag: true,
   lastModified: true
@@ -46,11 +52,11 @@ app.use(express.static(path.join(__dirname, 'public'), {
 
 // Explicit HTML Page Routes for Vercel and Web
 app.get('/', (req, res) => {
-  res.sendFile(path.join(__dirname, 'public', 'index.html'));
+  res.sendFile(path.join(PUBLIC_DIR, 'index.html'));
 });
 
 app.get(['/wedding', '/wedding.html'], (req, res) => {
-  res.sendFile(path.join(__dirname, 'public', 'wedding.html'));
+  res.sendFile(path.join(PUBLIC_DIR, 'wedding.html'));
 });
 
 // Video Streaming & Media Route with Full HTTP 206 Range Support for Chrome & Browsers
@@ -747,16 +753,19 @@ app.delete('/api/wishes/:id', (req, res) => {
 
 // Explicit Page Routes
 app.get(['/', '/index', '/index.html'], (req, res) => {
-  res.sendFile(path.join(__dirname, 'public', 'index.html'));
+  res.sendFile(path.join(PUBLIC_DIR, 'index.html'));
 });
 
 app.get(['/wedding', '/wedding.html'], (req, res) => {
-  res.sendFile(path.join(__dirname, 'public', 'wedding.html'));
+  res.sendFile(path.join(PUBLIC_DIR, 'wedding.html'));
 });
 
 // Fallback to SPA index.html
 app.get('*', (req, res) => {
-  res.sendFile(path.join(__dirname, 'public', 'index.html'));
+  if (req.path.startsWith('/api/') || req.path.startsWith('/uploads/')) {
+    return res.status(404).json({ error: 'Endpoint not found' });
+  }
+  res.sendFile(path.join(PUBLIC_DIR, 'index.html'));
 });
 
 // Multer and Global Error Handling Middleware
