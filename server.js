@@ -9,6 +9,7 @@ try { compression = require('compression'); } catch (e) {}
 require('dotenv').config();
 
 const app = express();
+const PORT = process.env.PORT || 3000;
 const isVercel = Boolean(process.env.VERCEL || process.env.NOW_REGION);
 
 // GZIP / Brotli Compression for Lightning-Fast Loading

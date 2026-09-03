@@ -430,9 +430,9 @@ const Admin = {
           vidWrapper.style.cssText = "position:relative; width:52px; height:52px; border-radius:8px; overflow:hidden; background:#000; display:flex; align-items:center; justify-content:center; cursor:pointer;";
           vidWrapper.title = "Click to play video";
           vidWrapper.innerHTML = `
-            <video src="${item.url}#t=0.1" style="width:100%; height:100%; object-fit:cover;" muted preload="metadata"></video>
-            <div style="position:absolute; inset:0; background:rgba(0,0,0,0.35); display:flex; align-items:center; justify-content:center; color:#d4af37;">
-              <i class="fa-solid fa-play" style="font-size:0.75rem;"></i>
+            <video src="${item.url}#t=0.5" style="width:100%; height:100%; object-fit:cover;" muted preload="metadata" onerror="this.style.display='none'"></video>
+            <div style="position:absolute; inset:0; background:rgba(18,22,34,0.7); display:flex; align-items:center; justify-content:center; color:#d4af37;">
+              <i class="fa-solid fa-play" style="font-size:0.85rem;"></i>
             </div>
           `;
           vidWrapper.addEventListener('click', () => Gallery.openVideoModal(item));

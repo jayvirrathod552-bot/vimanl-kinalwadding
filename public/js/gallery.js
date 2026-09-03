@@ -158,8 +158,12 @@ const Gallery = {
           <div class="video-play-indicator">
             <i class="fa-solid fa-play"></i>
           </div>
-          <video class="media-thumbnail video-thumb" preload="none" muted playsinline loop src="${previewSrc}#t=0.1">
+          <video class="media-thumbnail video-thumb" preload="metadata" muted playsinline loop src="${previewSrc}#t=0.5" onerror="this.style.display='none'; if(this.nextElementSibling) this.nextElementSibling.style.display='flex';">
           </video>
+          <div class="video-thumb-fallback" style="display:none; width:100%; height:130px; background:linear-gradient(135deg, #151a28 0%, #0d1017 100%); align-items:center; justify-content:center; flex-direction:column; gap:6px;">
+            <i class="fa-solid fa-film" style="color:var(--gold-primary); font-size:1.6rem;"></i>
+            <span style="font-size:0.7rem; color:var(--text-secondary); font-weight:600;">Play Video</span>
+          </div>
         ` : `
           <img src="${previewSrc}" alt="Photo" class="media-thumbnail" loading="lazy" onerror="this.onerror=null; this.src='data:image/svg+xml;utf8,<svg xmlns=\\'http://www.w3.org/2000/svg\\' width=\\'400\\' height=\\'300\\' viewBox=\\'0 0 400 300\\'><rect fill=\\'%2311141e\\' width=\\'400\\' height=\\'300\\'/><text fill=\\'%23d4af37\\' font-size=\\'18\\' font-family=\\'sans-serif\\' x=\\'50%\\' y=\\'50%\\' text-anchor=\\'middle\\'>Photo</text></svg>';">
         `}
@@ -332,30 +336,47 @@ const Gallery = {
     const container = document.getElementById('video-player-container');
     const dlBtn = document.getElementById('video-download-btn');
     
-    document.getElementById('video-modal-title').textContent = item.title || 'Video Player';
+    const isMkv = (item.originalName && item.originalName.toLowerCase().endsWith('.mkv')) || (item.url && item.url.toLowerCase().includes('.mkv'));
+    const isAvi = (item.originalName && item.originalName.toLowerCase().endsWith('.avi')) || (item.url && item.url.toLowerCase().includes('.avi'));
+
+    document.getElementById('video-modal-title').textContent = item.title || item.originalName || 'Video Player';
     dlBtn.href = item.downloadUrl || item.url;
     dlBtn.setAttribute('download', item.originalName || 'video.mp4');
 
     if (item.storageType === 'gdrive' && item.embedUrl) {
       container.innerHTML = `<iframe src="${item.embedUrl}" allow="autoplay" allowfullscreen style="width:100%; height:450px; border:none; border-radius:12px;"></iframe>`;
     } else {
+      const mimeType = isMkv ? 'video/x-matroska' : (item.mimeType || 'video/mp4');
+      
       container.innerHTML = `
-        <video id="active-video-element" controls autoplay playsinline controlsList="nodownload" style="width:100%; max-height:75vh; border-radius:12px; background:#000;">
-          <source src="${item.url}" type="${item.mimeType || 'video/mp4'}">
-          <source src="${item.url}">
-          Your browser does not support playing this video file directly.
-        </video>
-        <div id="video-fallback-msg" style="display:none; text-align:center; padding:20px; color:var(--text-muted);">
-          <p style="margin-bottom:10px;"><i class="fa-solid fa-circle-exclamation" style="color:var(--gold-primary); font-size:1.5rem;"></i></p>
-          <p>Browser cannot decode this video container directly.</p>
-          <a href="${item.url}" download="${item.originalName || 'video'}" class="btn btn-gold btn-sm" style="margin-top:10px;">
-            <i class="fa-solid fa-download"></i> Download to Play Locally
-          </a>
+        <div class="custom-video-wrapper" style="position:relative; width:100%; background:#05070c; border-radius:14px; overflow:hidden;">
+          <video id="active-video-element" controls playsinline webkit-playsinline x5-playsinline preload="metadata" style="width:100%; max-height:65vh; border-radius:14px; background:#000; display:block;">
+            <source src="${item.url}" type="${mimeType}">
+            <source src="${item.url}" type="video/mp4">
+            <source src="${item.url}">
+            Your browser does not support HTML5 video streaming for this format.
+          </video>
+          
+          <div id="video-fallback-msg" style="${isMkv ? 'display:block;' : 'display:none;'} text-align:center; padding:24px 16px; background:rgba(18,22,34,0.92); border:1px solid rgba(212,175,55,0.3); border-radius:14px; margin-top:${isMkv ? '12px' : '0'};">
+            <div style="width:50px; height:50px; border-radius:50%; background:rgba(212,175,55,0.15); border:1px solid var(--gold-primary); display:inline-flex; align-items:center; justify-content:center; color:var(--gold-primary); font-size:1.4rem; margin-bottom:12px;">
+              <i class="fa-solid fa-circle-play"></i>
+            </div>
+            <h4 style="color:#f8fafc; font-size:1.1rem; margin-bottom:6px;">High-Quality Video (${isMkv ? 'MKV Format' : 'Media File'})</h4>
+            <p style="color:var(--text-secondary); font-size:0.88rem; line-height:1.5; margin-bottom:16px;">
+              ${isMkv ? '⚠️ Phone browsers (Chrome & Safari) me .MKV format direct play nahi hota. Is video ko download karke phone ke VLC, MX Player ya Gallery me full HD me chalayein.' : 'Mobile browser me direct playback me issue aa raha he to niche diye button se download karke dekhein.'}
+            </p>
+            <a href="${item.downloadUrl || item.url}" download="${item.originalName || 'video'}" class="btn btn-gold" style="width:100%; justify-content:center; padding:12px; font-weight:700; border-radius:12px; box-shadow:0 6px 20px rgba(212,175,55,0.35);">
+              <i class="fa-solid fa-cloud-arrow-down"></i> Download to Watch on Phone
+            </a>
+          </div>
         </div>
       `;
 
       const videoEl = container.querySelector('video');
       if (videoEl) {
+        if (!isMkv) {
+          videoEl.play().catch(() => {});
+        }
         videoEl.onerror = () => {
           const fallback = document.getElementById('video-fallback-msg');
           if (fallback) fallback.style.display = 'block';
